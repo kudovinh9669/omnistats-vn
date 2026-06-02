@@ -1,0 +1,21 @@
+            <div id="dashboard" class="tab-pane active">
+                <h2 class="section-title">Giải đấu đang theo dõi</h2>
+                <div class="leagues-grid">
+                    <div class="league-card" onclick="switchTab('schedule')">
+                        <i class="fa-solid fa-futbol league-icon"></i>
+                        <div><h3 style="font-size: 16px;">Ngoại hạng Anh</h3><p style="font-size: 13px; color: var(--text-muted);">Vòng 12</p></div>
+                    </div>
+                    <div class="league-card" onclick="switchTab('schedule')">
+                        <i class="fa-brands fa-twitch league-icon" style="color: #9146FF;"></i>
+                        <div><h3 style="font-size: 16px;">LCK Mùa Xuân</h3><p style="font-size: 13px; color: var(--text-muted);">Tuần 4</p></div>
+                    </div>
+                    <div class="league-card" onclick="navigateTo('schedule')">
+                        <i class="fa-solid fa-basketball league-icon" style="color: #f97316;"></i>
+                        <div><h3 style="font-size: 16px;">NBA Regular</h3><p style="font-size: 13px; color: var(--text-muted);">15 trận hôm nay</p></div>
+                    </div>
+                </div>
+
+                <h2 class="section-title">Trận đấu tâm điểm (Live)</h2>
+			<div class="matches-grid" id="live-matches-container">
+    			</div>
+            </div>

@@ -1,0 +1,22 @@
+    <!-- =========================================
+         SIDEBAR (Menu Trái)
+    ========================================= -->
+    <aside class="sidebar">
+        <div class="logo"><i class="fa-solid fa-chart-pie"></i> Omni<span>Stats</span></div>
+        <div class="nav-menu">
+    		<div class="nav-item" onclick="navigateTo('dashboard')" data-page="dashboard"><i class="fa-solid fa-house"></i> Trang chủ</div>
+   		<div class="nav-item" onclick="navigateTo('my-leagues')" data-page="my-leagues"><i class="fa-solid fa-star"></i> Giải đấu của tôi</div>
+    		<div class="nav-item" onclick="navigateTo('schedule')" data-page="schedule"><i class="fa-solid fa-calendar-days"></i> Lịch thi đấu</div>
+    		<div class="nav-item" onclick="navigateTo('minigame')" data-page="minigame"><i class="fa-solid fa-gamepad"></i> Minigame Xu</div>
+	</div>
+
+	<div class="sidebar-bottom">
+    		<div class="user-profile" onclick="navigateTo('account')" data-page="account">
+        	<img src="https://ui-avatars.com/api/?name=Kudo+Vinh&background=00d2ff&color=fff&rounded=true" alt="Avatar" class="avatar">
+        	<div class="user-info">
+            		<span class="user-name">Vinh Nguyễn Công</span>
+            		<span id="sidebar-balance" class="user-role">12,500 Xu</span>
+        	</div>
+    	</div>
+    	<div class="nav-item" onclick="navigateTo('settings')" data-page="settings"><i class="fa-solid fa-gear"></i> Cài đặt</div>
+	</div>

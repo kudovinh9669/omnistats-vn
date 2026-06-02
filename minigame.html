@@ -1,0 +1,50 @@
+            <!-- TAB 4: MINIGAME XU -->
+            <div id="minigame" class="tab-pane">
+                <h2 class="section-title">Quản lý Xu & Nhận thưởng</h2>
+                
+                <div class="minigame-layout">
+                    <!-- KHỐI SỐ DƯ & LỊCH SỬ -->
+                    <div class="balance-box">
+                        <div class="balance-header" onclick="toggleHistory()">
+                            <div>
+                                <p style="color: var(--text-muted); font-size: 13px; text-transform: uppercase;">Số dư khả dụng</p>
+                                <h2 style="font-size: 32px; color: var(--accent-green); margin-top: 5px;"><i class="fa-solid fa-coins"></i> <span id="main-balance">12,500</span></h2>
+                            </div>
+                            <div style="text-align: right; color: var(--text-muted);">
+                                <span style="font-size: 13px;">Lịch sử <i class="fa-solid fa-chevron-down" id="history-icon" style="transition: 0.3s;"></i></span>
+                            </div>
+                        </div>
+                        
+                        <div class="history-list" id="transaction-history">
+                            <div class="history-item">
+                                <span><i class="fa-solid fa-dice" style="color: var(--text-muted); margin-right: 8px;"></i> Cược trận T1 vs GenG</span>
+                                <span style="color: var(--accent-red); font-weight: 600;">-100 Xu</span>
+                            </div>
+                            <div class="history-item">
+                                <span><i class="fa-solid fa-trophy" style="color: #fbbf24; margin-right: 8px;"></i> Thắng cược Lakers</span>
+                                <span style="color: var(--accent-green); font-weight: 600;">+350 Xu</span>
+                            </div>
+                            <div class="history-item">
+                                <span><i class="fa-solid fa-calendar-check" style="color: var(--accent-blue); margin-right: 8px;"></i> Đăng nhập ngày 13</span>
+                                <span style="color: var(--accent-green); font-weight: 600;">+200 Xu</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KHỐI ĐIỂM DANH LỊCH -->
+                    <div class="login-box">
+                        <h4 style="margin-bottom: 5px;">Điểm danh Tháng 6</h4>
+                        <p style="font-size: 13px; color: var(--text-muted);">Đã nhận: 13/30 ngày</p>
+                        
+                        <div class="calendar-grid">
+                            <div class="cal-day done">1</div><div class="cal-day done">2</div><div class="cal-day done">3</div><div class="cal-day done">4</div><div class="cal-day done">5</div><div class="cal-day done">6</div><div class="cal-day done">7</div>
+                            <div class="cal-day done">8</div><div class="cal-day done">9</div><div class="cal-day done">10</div><div class="cal-day done">11</div><div class="cal-day done">12</div><div class="cal-day done">13</div><div class="cal-day today" id="today-box">14</div>
+                            <div class="cal-day">15</div><div class="cal-day">16</div><div class="cal-day">17</div><div class="cal-day">18</div><div class="cal-day">19</div><div class="cal-day">20</div><div class="cal-day">21</div>
+                            <div class="cal-day">22</div><div class="cal-day">23</div><div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day">26</div><div class="cal-day">27</div><div class="cal-day">28</div>
+                            <div class="cal-day">29</div><div class="cal-day">30</div>
+                        </div>
+                        
+                        <button class="btn-claim" id="btn-claim-daily" onclick="claimDailyCoin()">Nhận 200 Xu hôm nay</button>
+                    </div>
+                </div>
+            </div>
