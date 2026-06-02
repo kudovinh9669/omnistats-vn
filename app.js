@@ -4,10 +4,14 @@
 // 1. BỘ ĐỊNH TUYẾN COMPONENTS & PAGES (ROUTER ENGINE)
 // ========================================================
 
+// 1. HÀM TẢI COMPONENT (Mảnh ghép)
 async function loadComponent(elementId, filePath) {
     try {
-        const response = await fetch(filePath);
+        // MẸO QUAN TRỌNG: Thêm ?t=Date.now() để ép trình duyệt luôn tải file HTML mới nhất, tuyệt đối không dùng Cache cũ
+        const response = await fetch(`${filePath}?t=${Date.now()}`);
+        
         if (!response.ok) throw new Error(`Không tìm thấy ${filePath}`);
+        
         const htmlContent = await response.text();
         document.getElementById(elementId).innerHTML = htmlContent;
     } catch (error) {
