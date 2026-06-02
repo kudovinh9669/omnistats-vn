@@ -1,0 +1,32 @@
+# File: .github/workflows/data-cron.yml
+name: Auto Update OmniStats Data
+
+on:
+  schedule:
+    # Chạy tự động mỗi 15 phút
+    - cron: '*/15 * * * *'
+  workflow_dispatch: # Cho phép bạn bấm nút chạy thủ công bất cứ lúc nào
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        
+      - name: Cài đặt Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Chạy Script Kéo API
+        run: node update-data.js
+        
+      - name: Commit và Push file JSON mới lên web
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add live-matches.json
+          # Nếu có dữ liệu mới thì commit, không thì bỏ qua để tránh báo lỗi
+          git commit -m "Auto-update: Đồng bộ dữ liệu thể thao mới nhất" || exit 0
+          git push
