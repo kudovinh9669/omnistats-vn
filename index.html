@@ -443,23 +443,33 @@
     ========================================= -->
     <script>
 	// =========================================
-	// GIAI ĐOẠN 2.3: FETCH DỮ LIỆU TỪ KHO JSON TĨNH
+	// GIAI ĐOẠN 2.3: FETCH DỮ LIỆU TỪ KHO JSON TĨNH (Tối ưu hóa)
 	// =========================================
 
 async function fetchAndRenderLiveMatches() {
     const container = document.getElementById('live-matches-container');
     if (!container) return;
 
-    try {
-        // Chỉ cần đọc file JSON tĩnh ngay trong repo của bạn
-        // Lưu ý thêm biến thời gian Date.now() để trình duyệt không bị lưu cache dữ liệu cũ
-        const response = await fetch(`./live-matches.json?t=${Date.now()}`);
-        const matchesToRender = await response.json();
+    // Bật hiệu ứng Loading để tránh màn hình bị trắng
+    container.innerHTML = `
+        <div style="color: var(--accent-blue); padding: 20px; text-align: center; grid-column: span 2;">
+            <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i>
+            <p>Đang kéo dữ liệu trực tiếp từ kho...</p>
+        </div>
+    `;
 
-        container.innerHTML = ''; // Xóa loading
+    try {
+        // ĐỌC DỮ LIỆU RAW TỪ GITHUB: Bỏ qua hoàn toàn độ trễ của GitHub Pages
+        const response = await fetch(`https://raw.githubusercontent.com/kudovinh9669/omnistats-vn/main/live-matches.json?t=${Date.now()}`);
+        
+        // Kiểm tra xem file đã thực sự được tải về chưa
+        if (!response.ok) throw new Error("Chưa tìm thấy file JSON");
+        
+        const matchesToRender = await response.json();
+        container.innerHTML = ''; 
 
         if(matchesToRender.length === 0) {
-            container.innerHTML = '<div style="color: var(--text-muted); grid-column: span 2;">Hiện tại không có trận đấu nào.</div>';
+            container.innerHTML = '<div style="color: var(--text-muted); grid-column: span 2; text-align: center;">Hiện tại không có trận đấu nào.</div>';
             return;
         }
 
@@ -495,7 +505,13 @@ async function fetchAndRenderLiveMatches() {
         });
 
     } catch (error) {
-        console.error("Lỗi đọc dữ liệu tĩnh:", error);
+        console.error("Lỗi đồng bộ dữ liệu tĩnh:", error);
+        // Hiển thị lỗi ra màn hình để không bị trắng vùng div
+        container.innerHTML = `
+            <div style="color: var(--accent-red); padding: 20px; grid-column: span 2; text-align: center;">
+                <i class="fa-solid fa-triangle-exclamation"></i> Đang chờ Bot đồng bộ dữ liệu lần đầu. Vui lòng F5 lại sau vài giây!
+            </div>
+        `;
     }
 }
 
