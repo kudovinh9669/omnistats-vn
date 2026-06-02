@@ -1,5 +1,50 @@
 // File: app.js
+// ========================================================
+// 0. KHỞI TẠO FIREBASE (CƠ SỞ DỮ LIỆU ĐÁM MÂY)
+// ========================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyBoIkHVROkrYuybb0_w55uU43GTAwF9aQc",
+  authDomain: "omnistats-9669.firebaseapp.com",
+  projectId: "omnistats-9669",
+  storageBucket: "omnistats-9669.firebasestorage.app",
+  messagingSenderId: "948519147661",
+  appId: "1:948519147661:web:869b08c83024b2eeca6ac4",
+  measurementId: "G-MD49EYMPFH"
+};
 
+// Khởi tạo Firebase và Kho dữ liệu
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const USER_ID = "kudovinh9669"; // Mã định danh tài khoản của bạn
+
+// Hàm kéo số Xu từ Cloud về Web
+async function syncUserData() {
+    try {
+        const userRef = db.collection("users").doc(USER_ID);
+        const doc = await userRef.get();
+        
+        if (!doc.exists) {
+            // Nếu là người mới, khởi tạo ví với 12,500 Xu
+            await userRef.set({ balance: 12500 });
+            updateBalanceUI(12500);
+        } else {
+            // Nếu đã có data trên mây, lấy về hiển thị
+            updateBalanceUI(doc.data().balance);
+        }
+    } catch (error) {
+        console.error("Lỗi đồng bộ Firebase:", error);
+    }
+}
+
+// Hàm cập nhật giao diện số Xu
+function updateBalanceUI(amount) {
+    const mainBalance = document.getElementById('main-balance');
+    const sidebarBalance = document.getElementById('sidebar-balance');
+    const formatted = amount.toLocaleString('en-US');
+    
+    if (mainBalance) mainBalance.innerText = formatted;
+    if (sidebarBalance) sidebarBalance.innerText = formatted + ' Xu';
+}
 // ========================================================
 // 1. BỘ ĐỊNH TUYẾN COMPONENTS & PAGES (ROUTER ENGINE)
 // ========================================================
@@ -32,7 +77,8 @@ async function initApp() {
     if (themeToggle) {
         themeToggle.checked = !document.body.classList.contains('light-mode');
     }
-
+    // KÉO DATA TỪ CLOUD NGAY KHI MỞ WEB
+    await syncUserData();
     // Mặc định tải trang chủ đầu tiên
     await navigateTo('dashboard');
 }
@@ -56,6 +102,11 @@ async function navigateTo(pageName) {
     } else if (pageName === 'schedule') {
         initScheduleListeners();
     }
+    // ==========================================
+    // THÊM DÒNG NÀY VÀO DƯỚI CÙNG CỦA HÀM:
+    // Đảm bảo mỗi lần chuyển tab đều gọi Firebase lấy lại số dư mới nhất
+    syncUserData();
+    // ==========================================
 }
 
 // ========================================================
@@ -174,34 +225,49 @@ function toggleHistory() {
     }
 }
 
-function claimDailyCoin() {
+async function claimDailyCoin() {
     const btn = document.getElementById('btn-claim-daily');
     const todayBox = document.getElementById('today-box');
     if (!btn || !todayBox) return;
 
+    // Đổi giao diện nút bấm thành "Đang tải"
     todayBox.classList.remove('today');
     todayBox.classList.add('done');
     btn.disabled = true;
-    btn.innerText = "Đã nhận. Đợi tới 00:00 ngày mai";
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu lên Cloud...';
     
-    const balanceElem = document.getElementById('main-balance');
-    const sidebarBalance = document.getElementById('sidebar-balance');
-    let currentCoins = parseInt(balanceElem.innerText.replace(/,/g, ''));
-    currentCoins += 200;
-    
-    balanceElem.innerText = currentCoins.toLocaleString('en-US');
-    if (sidebarBalance) sidebarBalance.innerText = currentCoins.toLocaleString('en-US') + ' Xu';
-    
-    const historyList = document.getElementById('transaction-history');
-    if (historyList) {
-        const newHistoryItem = document.createElement('div');
-        newHistoryItem.className = 'history-item';
-        newHistoryItem.innerHTML = `
-            <span><i class="fa-solid fa-calendar-check" style="color: var(--accent-blue); margin-right: 8px;"></i> Vừa điểm danh hôm nay</span>
-            <span style="color: var(--accent-green); font-weight: 600;">+200 Xu</span>
-        `;
-        historyList.insertBefore(newHistoryItem, historyList.firstChild);
-        if (!historyList.classList.contains('show')) toggleHistory();
+    try {
+        const userRef = db.collection("users").doc(USER_ID);
+        // Lấy số dư hiện tại trên DB
+        const docSnap = await userRef.get();
+        const currentCoins = docSnap.exists ? docSnap.data().balance : 12500;
+        
+        // Cộng 200 Xu và lưu ngược lên DB
+        const newCoins = currentCoins + 200;
+        await userRef.update({ balance: newCoins });
+        
+        // Cập nhật giao diện
+        updateBalanceUI(newCoins);
+        btn.innerText = "Đã nhận. Đợi tới 00:00 ngày mai";
+        
+        // Thêm lịch sử (chỉ hiển thị tạm)
+        const historyList = document.getElementById('transaction-history');
+        if (historyList) {
+            const newHistoryItem = document.createElement('div');
+            newHistoryItem.className = 'history-item';
+            newHistoryItem.innerHTML = `
+                <span><i class="fa-solid fa-cloud-arrow-up" style="color: var(--accent-blue); margin-right: 8px;"></i> Nhận thưởng hàng ngày (Đã lưu Cloud)</span>
+                <span style="color: var(--accent-green); font-weight: 600;">+200 Xu</span>
+            `;
+            historyList.insertBefore(newHistoryItem, historyList.firstChild);
+            if (!historyList.classList.contains('show')) toggleHistory();
+        }
+    } catch (error) {
+        console.error("Lỗi lưu Xu:", error);
+        btn.innerText = "Lỗi mạng, thử lại sau!";
+        btn.disabled = false;
+        todayBox.classList.remove('done');
+        todayBox.classList.add('today');
     }
 }
 
