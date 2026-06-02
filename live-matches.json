@@ -1,0 +1,32 @@
+[
+  {
+    "type": "esports",
+    "league": "EBL",
+    "time": "LIVE",
+    "teamHome": {
+      "name": "PS",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/136787/partizan_esportslogo_square.png"
+    },
+    "teamAway": {
+      "name": "CROA",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/138099/croatian_flairlogo_square.png"
+    },
+    "scoreHome": 0,
+    "scoreAway": 0
+  },
+  {
+    "type": "basketball",
+    "league": "NBA",
+    "time": "Final",
+    "teamHome": {
+      "name": "HUS",
+      "logo": "https://ui-avatars.com/api/?name=HUS&background=random&color=fff&bold=true"
+    },
+    "teamAway": {
+      "name": "NYK",
+      "logo": "https://ui-avatars.com/api/?name=NYK&background=random&color=fff&bold=true"
+    },
+    "scoreHome": 18,
+    "scoreAway": 24
+  }
+]
