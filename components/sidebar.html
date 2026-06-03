@@ -11,12 +11,16 @@
 	</div>
 
 	<div class="sidebar-bottom">
-    		<div class="user-profile" onclick="navigateTo('account')" data-page="account">
-        	<img src="https://ui-avatars.com/api/?name=Kudo+Vinh&background=00d2ff&color=fff&rounded=true" alt="Avatar" class="avatar">
-        	<div class="user-info">
-            		<span class="user-name">Vinh Nguyễn Công</span>
-            		<span id="sidebar-balance" class="user-role">12,500 Xu</span>
-        	</div>
-    	</div>
-    	<div class="nav-item" onclick="navigateTo('settings')" data-page="settings"><i class="fa-solid fa-gear"></i> Cài đặt</div>
-	</div>
+            <div class="user-profile" onclick="navigateTo('account')" data-page="account">
+                <img src="https://ui-avatars.com/api/?name=User&background=00d2ff&color=fff&rounded=true" alt="Avatar" class="avatar">
+                <div class="user-info">
+                    <span id="sidebar-username" class="user-name">Đang tải...</span>
+                    <span id="sidebar-balance" class="user-role">Đang tải Xu...</span>
+                </div>
+            </div>
+            <div class="nav-item" onclick="navigateTo('settings')" data-page="settings"><i class="fa-solid fa-gear"></i> Cài đặt</div>
+            
+            <div class="nav-item" onclick="handleLogout()" style="color: var(--accent-red); margin-top: 5px;">
+                <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+            </div>
+        </div>
