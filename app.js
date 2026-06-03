@@ -1,6 +1,6 @@
 // File: app.js
 // ========================================================
-// 0. KHỞI TẠO FIREBASE (CƠ SỞ DỮ LIỆU ĐÁM MÂY)
+// 0. KHỞI TẠO FIREBASE & BẢO MẬT TÀI KHOẢN (AUTH)
 // ========================================================
 const firebaseConfig = {
   apiKey: "AIzaSyBoIkHVROkrYuybb0_w55uU43GTAwF9aQc",
@@ -8,19 +8,71 @@ const firebaseConfig = {
   projectId: "omnistats-9669",
   storageBucket: "omnistats-9669.firebasestorage.app",
   messagingSenderId: "948519147661",
-  appId: "1:948519147661:web:869b08c83024b2eeca6ac4",
-  measurementId: "G-MD49EYMPFH"
+  appId: "1:948519147661:web:869b08c83024b2eeca6ac4"
 };
 
-// Khởi tạo Firebase và Kho dữ liệu
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const USER_ID = "kudovinh9669"; // Mã định danh tài khoản của bạn
+const auth = firebase.auth();
+let CURRENT_USER = null; 
+
+// Lắng nghe trạng thái: Người dùng đang Đăng nhập hay Đăng xuất?
+auth.onAuthStateChanged(async (user) => {
+    if (user) {
+        CURRENT_USER = user;
+        // Hiện khung giao diện web
+        document.getElementById('sidebar-container').style.display = 'flex';
+        document.getElementById('header-container').style.display = 'flex';
+        document.getElementById('right-panel-container').style.display = 'block';
+        
+        await initApp(); // Tải components, chạy dashboard và lấy dữ liệu Xu
+    } else {
+        CURRENT_USER = null;
+        // Ẩn khung giao diện web, chỉ hiện vùng giữa
+        document.getElementById('sidebar-container').style.display = 'none';
+        document.getElementById('header-container').style.display = 'none';
+        document.getElementById('right-panel-container').style.display = 'none';
+        
+        // Gọi file Form đăng nhập ra giữa màn hình
+        loadComponent('page-content', `login.html?t=${Date.now()}`); 
+    }
+});
+
+// Các hàm xử lý Nút bấm Đăng nhập / Đăng ký
+async function handleLogin() {
+    const email = document.getElementById('auth-email').value;
+    const pass = document.getElementById('auth-password').value;
+    try {
+        await auth.signInWithEmailAndPassword(email, pass);
+    } catch (error) {
+        document.getElementById('auth-error').innerText = "Sai email hoặc mật khẩu!";
+    }
+}
+
+async function handleRegister() {
+    const email = document.getElementById('auth-email').value;
+    const pass = document.getElementById('auth-password').value;
+    try {
+        const userCred = await auth.createUserWithEmailAndPassword(email, pass);
+        // Tạo kho dữ liệu riêng cho tài khoản mới (Khởi điểm 12,500 Xu)
+        await db.collection("users").doc(userCred.user.uid).set({
+            email: email,
+            balance: 12500,
+            history: []
+        });
+    } catch (error) {
+        document.getElementById('auth-error').innerText = "Lỗi: Mật khẩu cần >= 6 ký tự hoặc Email đã tồn tại.";
+    }
+}
+
+function handleLogout() {
+    auth.signOut();
+}
 
 // Hàm kéo số Xu từ Cloud về Web
 async function syncUserData() {
     try {
-        const userRef = db.collection("users").doc(USER_ID);
+        const userRef = db.collection("users").doc(CURRENT_USER.uid);
         const doc = await userRef.get();
         
         if (!doc.exists) {
@@ -237,7 +289,7 @@ async function claimDailyCoin() {
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu lên Cloud...';
     
     try {
-        const userRef = db.collection("users").doc(USER_ID);
+        const userRef = db.collection("users").doc(CURRENT_USER.uid);
         // Lấy số dư hiện tại trên DB
         const docSnap = await userRef.get();
         const currentCoins = docSnap.exists ? docSnap.data().balance : 12500;
@@ -295,5 +347,3 @@ setInterval(() => {
     });
 }, 1000);
 
-// Chạy khởi tạo ứng dụng
-initApp();
