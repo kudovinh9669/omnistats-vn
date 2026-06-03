@@ -54,10 +54,10 @@ async function handleRegister() {
     const pass = document.getElementById('auth-password').value;
     try {
         const userCred = await auth.createUserWithEmailAndPassword(email, pass);
-        // Tạo kho dữ liệu riêng cho tài khoản mới (Khởi điểm 12,500 Xu)
+        // Tạo kho dữ liệu riêng cho tài khoản mới (Khởi điểm 0 Xu)
         await db.collection("users").doc(userCred.user.uid).set({
             email: email,
-            balance: 12500,
+            balance: 0,
             history: []
         });
     } catch (error) {
@@ -76,9 +76,9 @@ async function syncUserData() {
         const doc = await userRef.get();
         
         if (!doc.exists) {
-            // Nếu là người mới, khởi tạo ví với 12,500 Xu
-            await userRef.set({ balance: 12500 });
-            updateBalanceUI(12500);
+            // Nếu là người mới, khởi tạo ví với 0 Xu
+            await userRef.set({ balance: 0 });
+            updateBalanceUI(0);
         } else {
             // Nếu đã có data trên mây, lấy về hiển thị
             updateBalanceUI(doc.data().balance);
@@ -292,7 +292,7 @@ async function claimDailyCoin() {
         const userRef = db.collection("users").doc(CURRENT_USER.uid);
         // Lấy số dư hiện tại trên DB
         const docSnap = await userRef.get();
-        const currentCoins = docSnap.exists ? docSnap.data().balance : 12500;
+        const currentCoins = docSnap.exists ? docSnap.data().balance : 0;
         
         // Cộng 200 Xu và lưu ngược lên DB
         const newCoins = currentCoins + 200;
