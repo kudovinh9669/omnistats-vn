@@ -34,7 +34,7 @@ auth.onAuthStateChanged(async (user) => {
         document.getElementById('right-panel-container').style.display = 'none';
         
         // Gọi file Form đăng nhập ra giữa màn hình
-        loadComponent('page-content', `login.html?t=${Date.now()}`); 
+        loadComponent('page-content', `pages/login.html?t=${Date.now()}`); 
     }
 });
 
