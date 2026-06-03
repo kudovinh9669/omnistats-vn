@@ -71,6 +71,14 @@ auth.onAuthStateChanged(async (user) => {
         
         await initApp(); 
         
+        // --- THÊM 5 DÒNG NÀY ĐỂ CẬP NHẬT TÊN NGƯỜI DÙNG ---
+        const emailName = user.email.split('@')[0]; // Lấy phần chữ trước còng @ của email
+        const headerGreeting = document.getElementById('header-greeting');
+        const sidebarName = document.getElementById('sidebar-username');
+        if (headerGreeting) headerGreeting.innerHTML = `Chào mừng, ${emailName}! <i class="fa-regular fa-bell" style="margin-left: 15px; font-size: 16px; cursor: pointer;"></i>`;
+        if (sidebarName) sidebarName.innerText = emailName;
+        // --------------------------------------------------
+        
         // Bơm tên người dùng lên giao diện
         const emailName = user.email.split('@')[0];
         const headerGreeting = document.getElementById('header-greeting');
