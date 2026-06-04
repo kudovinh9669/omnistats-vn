@@ -1,11 +1,39 @@
 <div style="max-width: 400px; margin: 80px auto; background: var(--bg-card); padding: 30px; border-radius: 12px; border: 1px solid var(--border-color); text-align: center; box-shadow: 0 4px 15px var(--shadow);">
     <div style="font-size: 26px; font-weight: 700; color: var(--text-main); margin-bottom: 25px;">Omni<span style="color: var(--accent-blue);">Stats</span></div>
     
-    <input type="email" id="auth-email" placeholder="Email đăng nhập" style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main); outline: none;">
-    <input type="password" id="auth-password" placeholder="Mật khẩu (ít nhất 6 ký tự)" style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main); outline: none;">
+    <input type="email" id="auth-email" placeholder="Email đăng nhập" class="form-input" style="margin-bottom: 15px;">
+    <input type="password" id="auth-password" placeholder="Mật khẩu" class="form-input" style="margin-bottom: 20px;">
     
     <button onclick="handleLogin()" style="width: 100%; padding: 12px; background: var(--accent-blue); color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 10px; transition: 0.2s;">Đăng nhập</button>
-    <button onclick="handleRegister()" style="width: 100%; padding: 12px; background: transparent; color: var(--accent-green); border: 1px solid var(--accent-green); border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s;">Đăng ký tài khoản mới</button>
-    
-    <p id="auth-error" style="color: var(--accent-red); margin-top: 15px; font-size: 13px; font-weight: 500; min-height: 20px;"></p>
+    <button onclick="document.getElementById('register-modal').classList.add('active')" style="width: 100%; padding: 12px; background: transparent; color: var(--accent-green); border: 1px solid var(--accent-green); border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s;">Tạo tài khoản mới</button>
+</div>
+
+<div id="register-modal" class="modal-overlay">
+    <div class="modal-content">
+        <i class="fa-solid fa-xmark close-modal" onclick="document.getElementById('register-modal').classList.remove('active')"></i>
+        <h2 style="margin-bottom: 20px; font-size: 20px; text-align: center;">Đăng ký Tài khoản</h2>
+        
+        <div class="form-group">
+            <label>Tên hiển thị (Tên thật / Biệt danh)</label>
+            <input type="text" id="reg-displayname" class="form-input" placeholder="VD: Vinh Nguyễn Công">
+        </div>
+        <div class="form-group">
+            <label>Tên đăng nhập (Username)</label>
+            <input type="text" id="reg-username" class="form-input" placeholder="VD: nguyencongvinh9669">
+        </div>
+        <div class="form-group">
+            <label>Địa chỉ Email</label>
+            <input type="email" id="reg-email" class="form-input" placeholder="VD: vinh@gmail.com">
+        </div>
+        <div class="form-group">
+            <label>Mật khẩu</label>
+            <input type="password" id="reg-password" class="form-input" placeholder="Ít nhất 6 ký tự">
+        </div>
+        <div class="form-group">
+            <label>Xác nhận mật khẩu</label>
+            <input type="password" id="reg-repassword" class="form-input" placeholder="Nhập lại mật khẩu">
+        </div>
+        
+        <button onclick="handleRegister()" style="width: 100%; padding: 12px; background: var(--accent-green); color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px;">Hoàn tất Đăng ký</button>
+    </div>
 </div>
