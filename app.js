@@ -83,23 +83,12 @@ auth.onAuthStateChanged(async (user) => {
         document.getElementById('sidebar-container').style.display = 'flex';
         document.getElementById('header-container').style.display = 'flex';
         document.getElementById('right-panel-container').style.display = 'block';
-        
         await initApp(); 
-        
-        // Bơm tên người dùng lên giao diện
-        const emailName = user.email.split('@')[0];
-        const headerGreeting = document.getElementById('header-greeting');
-        const sidebarName = document.getElementById('sidebar-username');
-        if (headerGreeting) headerGreeting.innerHTML = `Chào mừng, ${emailName}! <i class="fa-regular fa-bell" style="margin-left: 15px; font-size: 16px; cursor: pointer;"></i>`;
-        if (sidebarName) sidebarName.innerText = emailName;
-        
     } else {
         CURRENT_USER = null;
         document.getElementById('sidebar-container').style.display = 'none';
         document.getElementById('header-container').style.display = 'none';
         document.getElementById('right-panel-container').style.display = 'none';
-        
-        // Tải trang đăng nhập
         loadComponent('page-content', `pages/login.html`); 
     }
 });
@@ -146,7 +135,7 @@ async function handleRegister() {
             email: email,
             displayName: displayName,
             username: username,
-            balance: 12500, // Vốn khởi nghiệp
+            balance: 0, // Vốn khởi nghiệp
             history: []
         });
         
@@ -194,10 +183,23 @@ async function syncUserData() {
         if (doc.exists) {
             const data = doc.data();
             updateBalanceUI(data.balance);
-            
-            // Vẽ lại lịch sử và lịch điểm danh từ dữ liệu gốc
             renderHistoryUI(data.history || []);
             renderRealtimeCalendar(data.lastClaimDate);
+
+            // --- BƠM TÊN THẬT VÀ TẠO AVATAR TỪ DATABASE ---
+            const realName = data.displayName || CURRENT_USER.email.split('@')[0];
+            const headerGreeting = document.getElementById('header-greeting');
+            const sidebarName = document.getElementById('sidebar-username');
+            
+            if (headerGreeting) headerGreeting.innerHTML = `Chào mừng trở lại, ${realName}! <i class="fa-regular fa-bell" style="margin-left: 15px; font-size: 16px; cursor: pointer;"></i>`;
+            if (sidebarName) sidebarName.innerText = realName;
+            
+            // Cập nhật Avatar dựa trên tên thật
+            const avatarImg = document.querySelector('.sidebar .avatar');
+            if (avatarImg) {
+                avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(realName)}&background=00d2ff&color=fff&rounded=true`;
+            }
+            // -----------------------------------------------
         }
     } catch (error) {
         console.error("Lỗi đồng bộ Firebase:", error);
