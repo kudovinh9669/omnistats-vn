@@ -118,36 +118,64 @@ async function handleLogin() {
 }
 
 async function handleRegister() {
+    // 1. Lấy dữ liệu từ các ô nhập liệu
     const email = document.getElementById('reg-email').value;
     const pass = document.getElementById('reg-password').value;
     const repass = document.getElementById('reg-repassword').value;
     const displayName = document.getElementById('reg-displayname').value;
     const username = document.getElementById('reg-username').value;
 
+    // 2. Chốt chặn kiểm tra rỗng
     if (!email || !pass || !displayName || !username) {
         showToast("Vui lòng điền đầy đủ tất cả thông tin!", "error");
         return;
     }
+    
+    // 3. Chốt chặn mật khẩu khớp nhau
     if (pass !== repass) {
         showToast("Mật khẩu xác nhận không khớp!", "error");
         return;
     }
 
     try {
+        // 4. Tạo tài khoản trên hệ thống Firebase Auth
         const userCred = await auth.createUserWithEmailAndPassword(email, pass);
-        // Lưu toàn bộ thông tin chi tiết vào kho dữ liệu
+        
+        // 5. Tạo file save (Profile) trên Database với thông tin chi tiết
         await db.collection("users").doc(userCred.user.uid).set({
             email: email,
             displayName: displayName,
             username: username,
-            balance: 12500, // Tặng vốn khởi nghiệp
+            balance: 12500, // Vốn khởi nghiệp
             history: []
         });
         
-        document.getElementById('register-modal').classList.remove('active');
-        showToast("Đăng ký thành công!", "success");
+        // 6. Ép Đăng xuất ngay lập tức (Chống auto-login của Firebase)
+        await auth.signOut();
+        
+        // 7. Dọn dẹp giao diện và báo cáo thành công
+        document.getElementById('register-modal').classList.remove('active'); // Tắt Pop-up
+        
+        // Xóa trắng các ô nhập liệu để lần sau mở lên không bị dính chữ cũ
+        document.getElementById('reg-email').value = '';
+        document.getElementById('reg-password').value = '';
+        document.getElementById('reg-repassword').value = '';
+        document.getElementById('reg-displayname').value = '';
+        document.getElementById('reg-username').value = '';
+        
+        // Bắn thông báo Toast Pop-up xịn xò trong web
+        showToast("Đăng ký thành công! Vui lòng đăng nhập để tiếp tục.", "success");
+        
     } catch (error) {
-        showToast("Lỗi: Email đã tồn tại hoặc mật khẩu quá ngắn.", "error");
+        console.error("Lỗi đăng ký:", error);
+        // Bắt lỗi chi tiết để báo lại cho người dùng bằng Toast
+        if (error.code === 'auth/email-already-in-use') {
+            showToast("Email này đã được sử dụng cho tài khoản khác!", "error");
+        } else if (error.code === 'auth/weak-password') {
+            showToast("Mật khẩu quá yếu (Cần ít nhất 6 ký tự).", "error");
+        } else {
+            showToast("Đã có lỗi xảy ra. Vui lòng thử lại!", "error");
+        }
     }
 }
 
