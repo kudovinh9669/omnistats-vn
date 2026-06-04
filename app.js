@@ -1,4 +1,19 @@
 //File:app.js
+// HÀM TẠO THÔNG BÁO XỊN XÒ (Thay thế alert)
+function showToast(message, type = 'success') {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+    const toast = document.createElement('div');
+    toast.className = `custom-toast ${type}`;
+    const icon = type === 'success' ? '<i class="fa-solid fa-circle-check" style="color: var(--accent-green);"></i>' : '<i class="fa-solid fa-triangle-exclamation" style="color: var(--accent-red);"></i>';
+    toast.innerHTML = `${icon} <span>${message}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => { toast.remove(); }, 3000);
+}
 // ========================================================
 // 0. KHỞI TẠO FIREBASE & BẢO MẬT TÀI KHOẢN (AUTH)
 // ========================================================
@@ -92,25 +107,47 @@ auth.onAuthStateChanged(async (user) => {
 async function handleLogin() {
     const email = document.getElementById('auth-email').value;
     const pass = document.getElementById('auth-password').value;
+    if(!email || !pass) { showToast("Vui lòng nhập Email và Mật khẩu!", "error"); return; }
+    
     try {
         await auth.signInWithEmailAndPassword(email, pass);
+        showToast("Đăng nhập thành công!", "success");
     } catch (error) {
-        document.getElementById('auth-error').innerText = "Sai email hoặc mật khẩu!";
+        showToast("Sai email hoặc mật khẩu!", "error");
     }
 }
 
 async function handleRegister() {
-    const email = document.getElementById('auth-email').value;
-    const pass = document.getElementById('auth-password').value;
+    const email = document.getElementById('reg-email').value;
+    const pass = document.getElementById('reg-password').value;
+    const repass = document.getElementById('reg-repassword').value;
+    const displayName = document.getElementById('reg-displayname').value;
+    const username = document.getElementById('reg-username').value;
+
+    if (!email || !pass || !displayName || !username) {
+        showToast("Vui lòng điền đầy đủ tất cả thông tin!", "error");
+        return;
+    }
+    if (pass !== repass) {
+        showToast("Mật khẩu xác nhận không khớp!", "error");
+        return;
+    }
+
     try {
         const userCred = await auth.createUserWithEmailAndPassword(email, pass);
+        // Lưu toàn bộ thông tin chi tiết vào kho dữ liệu
         await db.collection("users").doc(userCred.user.uid).set({
             email: email,
-            balance: 12500,
+            displayName: displayName,
+            username: username,
+            balance: 12500, // Tặng vốn khởi nghiệp
             history: []
         });
+        
+        document.getElementById('register-modal').classList.remove('active');
+        showToast("Đăng ký thành công!", "success");
     } catch (error) {
-        document.getElementById('auth-error').innerText = "Lỗi: Mật khẩu >= 6 ký tự hoặc Email đã tồn tại.";
+        showToast("Lỗi: Email đã tồn tại hoặc mật khẩu quá ngắn.", "error");
     }
 }
 
@@ -236,11 +273,10 @@ async function claimDailyCoin() {
         
         // Cú lừa F5 sẽ bị chặn đứng tại đây
         if (data.lastClaimDate === todayStr) {
-            alert("Hệ thống phát hiện bạn đã nhận Xu hôm nay rồi nhé!");
+            showToast("Hệ thống phát hiện bạn đã nhận Xu hôm nay rồi nhé!", "error");
             syncUserData();
             return;
         }
-
         const newCoins = data.balance + 200;
         
         // Đóng gói 1 dòng lịch sử hoàn chỉnh
