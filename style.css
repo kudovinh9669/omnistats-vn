@@ -158,3 +158,25 @@
         .leaderboard-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 14px; }
 
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+        /* =========================================
+           5. CUSTOM UI (TOAST NOTIFICATIONS & MODAL)
+        ========================================= */
+        /* Hệ thống Thông báo (Toast) */
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .custom-toast { background: var(--bg-card); color: var(--text-main); padding: 15px 25px; border-radius: 8px; border-left: 4px solid var(--accent-blue); box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 12px; animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s forwards; font-size: 14px; font-weight: 500; min-width: 280px;}
+        .custom-toast.error { border-left-color: var(--accent-red); }
+        .custom-toast.success { border-left-color: var(--accent-green); }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+        /* Cửa sổ nổi Đăng ký (Modal) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); animation: fadeIn 0.2s ease-in-out; }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: var(--bg-main); padding: 30px; border-radius: 12px; border: 1px solid var(--border-color); width: 450px; max-width: 90%; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .close-modal { position: absolute; top: 15px; right: 20px; cursor: pointer; color: var(--text-muted); font-size: 20px; transition: 0.2s; }
+        .close-modal:hover { color: var(--accent-red); }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; }
+        .form-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main); outline: none; transition: 0.2s; }
+        .form-input:focus { border-color: var(--accent-blue); }
