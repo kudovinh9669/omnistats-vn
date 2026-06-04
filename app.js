@@ -71,14 +71,6 @@ auth.onAuthStateChanged(async (user) => {
         
         await initApp(); 
         
-        // --- THÊM 5 DÒNG NÀY ĐỂ CẬP NHẬT TÊN NGƯỜI DÙNG ---
-        const emailName = user.email.split('@')[0]; // Lấy phần chữ trước còng @ của email
-        const headerGreeting = document.getElementById('header-greeting');
-        const sidebarName = document.getElementById('sidebar-username');
-        if (headerGreeting) headerGreeting.innerHTML = `Chào mừng, ${emailName}! <i class="fa-regular fa-bell" style="margin-left: 15px; font-size: 16px; cursor: pointer;"></i>`;
-        if (sidebarName) sidebarName.innerText = emailName;
-        // --------------------------------------------------
-        
         // Bơm tên người dùng lên giao diện
         const emailName = user.email.split('@')[0];
         const headerGreeting = document.getElementById('header-greeting');
@@ -92,7 +84,7 @@ auth.onAuthStateChanged(async (user) => {
         document.getElementById('header-container').style.display = 'none';
         document.getElementById('right-panel-container').style.display = 'none';
         
-        // Tải trang đăng nhập (Giả định bạn đã thả file login.html vào thư mục pages/)
+        // Tải trang đăng nhập
         loadComponent('page-content', `pages/login.html`); 
     }
 });
@@ -127,7 +119,7 @@ function handleLogout() {
 }
 
 // ========================================================
-// 3. QUẢN LÝ DỮ LIỆU ĐÁM MÂY (FIRESTORE)
+// 3. QUẢN LÝ DỮ LIỆU ĐÁM MÂY VÀ LỊCH SỬ GIAO DỊCH
 // ========================================================
 async function syncUserData() {
     if (!CURRENT_USER) return;
@@ -135,10 +127,87 @@ async function syncUserData() {
         const userRef = db.collection("users").doc(CURRENT_USER.uid);
         const doc = await userRef.get();
         if (doc.exists) {
-            updateBalanceUI(doc.data().balance);
+            const data = doc.data();
+            updateBalanceUI(data.balance);
+            
+            // Vẽ lại lịch sử và lịch điểm danh từ dữ liệu gốc
+            renderHistoryUI(data.history || []);
+            renderRealtimeCalendar(data.lastClaimDate);
         }
     } catch (error) {
         console.error("Lỗi đồng bộ Firebase:", error);
+    }
+}
+
+// Chức năng 1: Vẽ lại Lịch sử giao dịch thật
+function renderHistoryUI(historyArray) {
+    const historyList = document.getElementById('transaction-history');
+    if (!historyList) return; 
+    
+    historyList.innerHTML = '';
+    if (historyArray.length === 0) {
+        historyList.innerHTML = '<div style="text-align: center; padding: 15px; color: var(--text-muted);">Chưa có giao dịch nào.</div>';
+        return;
+    }
+
+    // Đảo ngược mảng để giao dịch mới nhất luôn trồi lên trên cùng
+    [...historyArray].reverse().forEach(item => {
+        historyList.innerHTML += `
+            <div class="history-item">
+                <span><i class="${item.icon}" style="color: var(--accent-blue); margin-right: 8px;"></i> ${item.text} <br><small style="color: var(--text-muted); font-size: 11px;">${item.time}</small></span>
+                <span style="color: ${item.color}; font-weight: 600;">${item.amount}</span>
+            </div>
+        `;
+    });
+}
+
+// Chức năng 2: Tạo bộ lịch thời gian thực thông minh
+function renderRealtimeCalendar(lastClaimDate) {
+    const calendarGrid = document.getElementById('dynamic-calendar');
+    const monthText = document.getElementById('calendar-month-text');
+    const btn = document.getElementById('btn-claim-daily');
+    if (!calendarGrid) return;
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth(); 
+    const dateToday = now.getDate();
+    const todayStr = now.toLocaleDateString('vi-VN');
+
+    if (monthText) monthText.innerText = `Điểm danh Tháng ${month + 1}`;
+
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    calendarGrid.innerHTML = ''; 
+
+    let isClaimedToday = (lastClaimDate === todayStr);
+
+    for (let i = 1; i <= daysInMonth; i++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'cal-day';
+        dayDiv.innerText = i;
+        
+        if (i === dateToday) {
+            dayDiv.id = 'today-box';
+            if (isClaimedToday) dayDiv.classList.add('done');
+            else dayDiv.classList.add('today');
+        } else if (i < dateToday) {
+            dayDiv.style.opacity = '0.5'; // Làm mờ các ngày quá khứ
+        }
+        
+        calendarGrid.appendChild(dayDiv);
+    }
+
+    // Khóa hoặc mở nút bấm theo trạng thái của đám mây
+    if (btn) {
+        if (isClaimedToday) {
+            btn.disabled = true;
+            btn.innerText = "Đã nhận. Đợi tới ngày mai";
+            btn.style.backgroundColor = 'var(--bg-hover)';
+        } else {
+            btn.disabled = false;
+            btn.innerText = "Nhận 200 Xu hôm nay";
+            btn.style.backgroundColor = 'var(--accent-green)';
+        }
     }
 }
 
@@ -150,47 +219,58 @@ function updateBalanceUI(amount) {
     if (sidebarBalance) sidebarBalance.innerText = formatted + ' Xu';
 }
 
+// Chức năng 3: Chốt chặn gian lận và Lưu lịch sử
 async function claimDailyCoin() {
     const btn = document.getElementById('btn-claim-daily');
-    const todayBox = document.getElementById('today-box');
-    if (!btn || !todayBox || !CURRENT_USER) return;
+    if (!btn || !CURRENT_USER) return;
 
-    todayBox.classList.remove('today');
-    todayBox.classList.add('done');
     btn.disabled = true;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu Cloud...';
     
     try {
         const userRef = db.collection("users").doc(CURRENT_USER.uid);
         const docSnap = await userRef.get();
-        const currentCoins = docSnap.exists ? docSnap.data().balance : 12500;
+        const data = docSnap.exists ? docSnap.data() : { balance: 0, history: [] };
         
-        const newCoins = currentCoins + 200;
-        await userRef.update({ balance: newCoins });
+        const todayStr = new Date().toLocaleDateString('vi-VN');
         
-        updateBalanceUI(newCoins);
-        btn.innerText = "Đã nhận. Đợi tới 00:00 ngày mai";
-        
-        const historyList = document.getElementById('transaction-history');
-        if (historyList) {
-            const newHistoryItem = document.createElement('div');
-            newHistoryItem.className = 'history-item';
-            newHistoryItem.innerHTML = `
-                <span><i class="fa-solid fa-cloud-arrow-up" style="color: var(--accent-blue); margin-right: 8px;"></i> Nhận thưởng hàng ngày</span>
-                <span style="color: var(--accent-green); font-weight: 600;">+200 Xu</span>
-            `;
-            historyList.insertBefore(newHistoryItem, historyList.firstChild);
-            if (!historyList.classList.contains('show')) toggleHistory();
+        // Cú lừa F5 sẽ bị chặn đứng tại đây
+        if (data.lastClaimDate === todayStr) {
+            alert("Hệ thống phát hiện bạn đã nhận Xu hôm nay rồi nhé!");
+            syncUserData();
+            return;
         }
+
+        const newCoins = data.balance + 200;
+        
+        // Đóng gói 1 dòng lịch sử hoàn chỉnh
+        const newHistoryItem = {
+            text: "Điểm danh hàng ngày",
+            amount: "+200 Xu",
+            color: "var(--accent-green)",
+            icon: "fa-solid fa-calendar-check",
+            time: new Date().toLocaleString('vi-VN')
+        };
+
+        // Bắn 1 mũi tên trúng 3 đích: Cập nhật Tiền + Đóng dấu ngày + Chèn lịch sử mảng
+        await userRef.update({ 
+            balance: newCoins,
+            lastClaimDate: todayStr,
+            history: firebase.firestore.FieldValue.arrayUnion(newHistoryItem)
+        });
+        
+        syncUserData();
+        
+        // Bật mở hộp lịch sử ra cho ngầu
+        const historyList = document.getElementById('transaction-history');
+        if (historyList && !historyList.classList.contains('show')) toggleHistory();
+
     } catch (error) {
         console.error("Lỗi lưu Xu:", error);
         btn.innerText = "Lỗi mạng, thử lại sau!";
         btn.disabled = false;
-        todayBox.classList.remove('done');
-        todayBox.classList.add('today');
     }
 }
-
 // ========================================================
 // 4. LÕI KÉO DỮ LIỆU ĐỘNG (DIỄN BIẾN TRẬN ĐẤU LIVE)
 // ========================================================
