@@ -1,15 +1,15 @@
 [
   {
     "type": "esports",
-    "league": "EBL",
+    "league": "EMEA Masters",
     "time": "LIVE",
     "teamHome": {
-      "name": "PS",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/136787/partizan_esportslogo_square.png"
+      "name": "FN",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/137186/fn_esportslogo_square.png"
     },
     "teamAway": {
-      "name": "CROA",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/138099/croatian_flairlogo_square.png"
+      "name": "VDN",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/130202/verdantlogo_square.png"
     },
     "scoreHome": 0,
     "scoreAway": 0
