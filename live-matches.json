@@ -1,15 +1,15 @@
 [
   {
     "type": "esports",
-    "league": "EMEA Masters",
+    "league": "LRN",
     "time": "LIVE",
     "teamHome": {
-      "name": "FN",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/137186/fn_esportslogo_square.png"
+      "name": "NCG ",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/138174/ncg_esports_lightmode.png"
     },
     "teamAway": {
-      "name": "VDN",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/130202/verdantlogo_square.png"
+      "name": "FUE",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/1636/fuego-ada0g8rs.png"
     },
     "scoreHome": 0,
     "scoreAway": 0
