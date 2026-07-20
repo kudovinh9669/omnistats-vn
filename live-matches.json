@@ -4,12 +4,12 @@
     "league": "LRN",
     "time": "LIVE",
     "teamHome": {
-      "name": "NCG ",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/138174/ncg_esports_lightmode.png"
+      "name": "3V",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/138890/ezgif_3fc0c30f293c9b41.png"
     },
     "teamAway": {
-      "name": "LYN.A",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/136076/900px_lyon_2024_lightmode.png"
+      "name": "NCG ",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/138174/ncg_esports_lightmode.png"
     },
     "scoreHome": 0,
     "scoreAway": 0
