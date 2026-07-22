@@ -1,15 +1,15 @@
 [
   {
     "type": "esports",
-    "league": "NLC",
+    "league": "LPLOL",
     "time": "LIVE",
     "teamHome": {
-      "name": "DMG",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/134156/dmg_esportslogo_profile.png"
+      "name": "TOS",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/137229/ezgif_78720f1ede9ea2de.png"
     },
     "teamAway": {
-      "name": "EA",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/49/epic-avalanche.png"
+      "name": "PANE",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/138982/panelao_lhc_allmode.png"
     },
     "scoreHome": 0,
     "scoreAway": 0
