@@ -1,15 +1,15 @@
 [
   {
     "type": "esports",
-    "league": "LRN",
+    "league": "NLC",
     "time": "LIVE",
     "teamHome": {
-      "name": "3V",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/138890/ezgif_3fc0c30f293c9b41.png"
+      "name": "DMG",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/134156/dmg_esportslogo_profile.png"
     },
     "teamAway": {
-      "name": "NCG ",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/138174/ncg_esports_lightmode.png"
+      "name": "EA",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/49/epic-avalanche.png"
     },
     "scoreHome": 0,
     "scoreAway": 0
