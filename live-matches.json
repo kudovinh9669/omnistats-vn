@@ -1,18 +1,18 @@
 [
   {
     "type": "esports",
-    "league": "Nexus League",
+    "league": "LPLOL",
     "time": "LIVE",
     "teamHome": {
-      "name": "AO",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/138944/ancient_ones_2025_lightmode.png"
+      "name": "TOS",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/137229/ezgif_78720f1ede9ea2de.png"
     },
     "teamAway": {
-      "name": "THG",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/137261/team_high_groundlogo_square.png"
+      "name": "PANE",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/138982/panelao_lhc_allmode.png"
     },
     "scoreHome": 0,
-    "scoreAway": 3
+    "scoreAway": 0
   },
   {
     "type": "basketball",
