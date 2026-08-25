@@ -1,15 +1,15 @@
 [
   {
     "type": "esports",
-    "league": "LPLOL",
+    "league": "Hitpoint Masters",
     "time": "LIVE",
     "teamHome": {
-      "name": "TOS",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/137229/ezgif_78720f1ede9ea2de.png"
+      "name": "OT",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/138054/onion_teamlogo_square.png"
     },
     "teamAway": {
-      "name": "PANE",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/138982/panelao_lhc_allmode.png"
+      "name": "CKZ",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/136343/285px_cita_kaizen_allmode.png"
     },
     "scoreHome": 0,
     "scoreAway": 0
