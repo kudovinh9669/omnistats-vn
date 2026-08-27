@@ -1,15 +1,15 @@
 [
   {
     "type": "esports",
-    "league": "Hitpoint Masters",
+    "league": "HLL",
     "time": "LIVE",
     "teamHome": {
-      "name": "OT",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/138054/onion_teamlogo_square.png"
+      "name": "VLR",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/138853/ezgif_868bc1cd08695395.png"
     },
     "teamAway": {
-      "name": "CKZ",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/136343/285px_cita_kaizen_allmode.png"
+      "name": "GSMC",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/128776/gamespace_mediterranean_college_esportslogo_square.png"
     },
     "scoreHome": 0,
     "scoreAway": 0
