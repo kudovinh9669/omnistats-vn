@@ -4,12 +4,12 @@
     "league": "HLL",
     "time": "LIVE",
     "teamHome": {
-      "name": "VLR",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/138853/ezgif_868bc1cd08695395.png"
+      "name": "TP",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/129409/190px_team_phantasma_teamcard.png"
     },
     "teamAway": {
-      "name": "GSMC",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/128776/gamespace_mediterranean_college_esportslogo_square.png"
+      "name": "WLG",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/126215/we_love_gaminglogo_square.png"
     },
     "scoreHome": 0,
     "scoreAway": 0
