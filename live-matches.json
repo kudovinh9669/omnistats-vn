@@ -1,15 +1,15 @@
 [
   {
     "type": "esports",
-    "league": "HLL",
+    "league": "World Star Challengers Invitational",
     "time": "LIVE",
     "teamHome": {
-      "name": "TP",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/129409/190px_team_phantasma_teamcard.png"
+      "name": "ZSK",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/139276/zsk_29logo_square.png"
     },
     "teamAway": {
-      "name": "WLG",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/126215/we_love_gaminglogo_square.png"
+      "name": "SGW",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/138127/ezgif_5e268d1a7560187d.png"
     },
     "scoreHome": 0,
     "scoreAway": 0
