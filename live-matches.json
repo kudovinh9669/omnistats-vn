@@ -1,15 +1,15 @@
 [
   {
     "type": "esports",
-    "league": "World Star Challengers Invitational",
+    "league": "EMEA Masters",
     "time": "LIVE",
     "teamHome": {
-      "name": "SLY",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/1449/123px_solarylogo_square.png"
+      "name": "KCB",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/128268/600px_karmine_corp_allmode.png"
     },
     "teamAway": {
-      "name": "SGW",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/138127/ezgif_5e268d1a7560187d.png"
+      "name": "WD",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/128425/white_dragonslogo_square.png"
     },
     "scoreHome": 0,
     "scoreAway": 0
