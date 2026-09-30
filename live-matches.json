@@ -4,12 +4,12 @@
     "league": "EMEA Masters",
     "time": "LIVE",
     "teamHome": {
-      "name": "KCB",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/128268/600px_karmine_corp_allmode.png"
+      "name": "TSC",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/136547/the_secret_club_esportlogo_square.png"
     },
     "teamAway": {
-      "name": "WD",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/128425/white_dragonslogo_square.png"
+      "name": "SU",
+      "logo": "https://cdn-api.pandascore.co/images/team/image/137931/447px_su_esports_allmode.png"
     },
     "scoreHome": 0,
     "scoreAway": 0
