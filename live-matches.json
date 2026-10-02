@@ -4,12 +4,10 @@
     "league": "EMEA Masters",
     "time": "LIVE",
     "teamHome": {
-      "name": "TSC",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/136547/the_secret_club_esportlogo_square.png"
+      "logo": "https://ui-avatars.com/api/?name=undefined&background=random"
     },
     "teamAway": {
-      "name": "SU",
-      "logo": "https://cdn-api.pandascore.co/images/team/image/137931/447px_su_esports_allmode.png"
+      "logo": "https://ui-avatars.com/api/?name=undefined&background=random"
     },
     "scoreHome": 0,
     "scoreAway": 0
